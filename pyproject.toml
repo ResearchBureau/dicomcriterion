@@ -1,0 +1,11 @@
+[project]
+name = "dicom-criterion"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "boolean.py>=4.0",
+    "pydicom>=2.4.0",
+    "pytest>=8.4.1",
+]
