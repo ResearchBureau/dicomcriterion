@@ -1,5 +1,12 @@
 # DICOM Criterion
 
+[![CI](https://github.com/sjoerdk/dicomcriterion/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/sjoerdk/dicomcriterion/actions/workflows/build.yml?query=branch%3Amain)
+[![PyPI](https://img.shields.io/pypi/v/dicomcriterion)](https://pypi.org/project/dicomcriterion/)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/dicomcriterion)](https://pypi.org/project/dicomcriterion/)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Checked with mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org/)
+
+
 A Python library for creating and evaluating boolean expressions against DICOM datasets. Build flexible validation rules using intuitive syntax to filter, validate, and process medical imaging data.
 
 ## Quick Start
