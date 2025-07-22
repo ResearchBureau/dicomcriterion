@@ -6,7 +6,7 @@ A Python library for creating and evaluating boolean expressions against DICOM d
 
 ```python
 from pydicom import Dataset
-from dicom_criterion import Criterion
+from dicomcriterion import Criterion
 
 # Create a sample DICOM dataset
 dataset = Dataset()

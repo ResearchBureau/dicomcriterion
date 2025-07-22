@@ -28,13 +28,13 @@ uv sync
 pytest
 
 # Type checking
-mypy dicom_criterion
+mypy dicomcriterion
 
 # Linting
-flake8 dicom_criterion
+flake8 dicomcriterion
 
 # Format code
-black dicom_criterion
+black dicomcriterion
 
 # Run pre-commit hooks
 pre-commit run --all-files

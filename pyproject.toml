@@ -1,7 +1,7 @@
 [project]
-name = "dicom-criterion"
+name = "dicomcriterion"
 version = "0.1.0"
-description = "Add your description here"
+description = "For creating and evaluating boolean expressions against DICOM datasets"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [

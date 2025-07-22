@@ -6,8 +6,8 @@ from pydicom.dataset import Dataset
 from pydicom.dataelem import DataElement
 from pydicom.valuerep import VR
 
-from dicom_criterion.exceptions import EvaluationError, FunctionNotFoundError
-from dicom_criterion.functions import (
+from dicomcriterion.exceptions import EvaluationError, FunctionNotFoundError
+from dicomcriterion.functions import (
     DicomFunction,
     EqualsFunction,
     ContainsFunction,

@@ -3,8 +3,8 @@
 import pytest
 import pydicom
 
-from dicom_criterion.exceptions import FunctionNotFoundError
-from dicom_criterion.functions import (
+from dicomcriterion.exceptions import EvaluationError, FunctionNotFoundError
+from dicomcriterion.functions import (
     DicomFunction,
     FunctionRegistry,
     EqualsFunction,
@@ -34,20 +34,20 @@ class TestFunctionRegistry:
         """Test registering a valid DICOM function."""
         registry = FunctionRegistry()
         registry.register("mock", MockFunction)
-        
+
         assert registry.is_registered("mock")
         assert "mock" in registry.get_registered_names()
 
     def test_register_invalid_function_raises_type_error(self):
         """Test that registering non-DicomFunction raises TypeError."""
         registry = FunctionRegistry()
-        
+
         class NotADicomFunction:
             pass
-        
+
         with pytest.raises(TypeError) as exc_info:
             registry.register("invalid", NotADicomFunction)
-        
+
         assert "must be a subclass of DicomFunction" in str(exc_info.value)
         assert "NotADicomFunction" in str(exc_info.value)
 
@@ -55,7 +55,7 @@ class TestFunctionRegistry:
         """Test that get_function returns a function instance."""
         registry = FunctionRegistry()
         registry.register("mock", MockFunction)
-        
+
         func = registry.get_function("mock")
         assert isinstance(func, MockFunction)
         assert isinstance(func, DicomFunction)
@@ -64,10 +64,10 @@ class TestFunctionRegistry:
         """Test that getting unregistered function raises error."""
         registry = FunctionRegistry()
         registry.register("exists", ExistsFunction)
-        
+
         with pytest.raises(FunctionNotFoundError) as exc_info:
             registry.get_function("nonexistent")
-        
+
         error = exc_info.value
         assert error.function_name == "nonexistent"
         assert "exists" in error.available_functions
@@ -75,9 +75,9 @@ class TestFunctionRegistry:
     def test_is_registered_returns_correct_status(self):
         """Test that is_registered returns correct boolean values."""
         registry = FunctionRegistry()
-        
+
         assert not registry.is_registered("mock")
-        
+
         registry.register("mock", MockFunction)
         assert registry.is_registered("mock")
         assert not registry.is_registered("other")
@@ -85,14 +85,14 @@ class TestFunctionRegistry:
     def test_get_registered_names_returns_all_names(self):
         """Test that get_registered_names returns all registered names."""
         registry = FunctionRegistry()
-        
+
         # Empty registry
         assert registry.get_registered_names() == []
-        
+
         # Add functions
         registry.register("mock", MockFunction)
         registry.register("equals", EqualsFunction)
-        
+
         names = registry.get_registered_names()
         assert len(names) == 2
         assert "mock" in names
@@ -101,12 +101,12 @@ class TestFunctionRegistry:
     def test_register_overwrites_existing_function(self):
         """Test that registering same name overwrites previous function."""
         registry = FunctionRegistry()
-        
+
         # Register first function
         registry.register("test", MockFunction)
         func1 = registry.get_function("test")
         assert isinstance(func1, MockFunction)
-        
+
         # Register different function with same name
         registry.register("test", EqualsFunction)
         func2 = registry.get_function("test")
@@ -116,21 +116,21 @@ class TestFunctionRegistry:
     def test_multiple_function_registration(self):
         """Test registering multiple functions works correctly."""
         registry = FunctionRegistry()
-        
+
         registry.register("equals", EqualsFunction)
         registry.register("contains", ContainsFunction)
         registry.register("exists", ExistsFunction)
-        
+
         assert len(registry.get_registered_names()) == 3
         assert registry.is_registered("equals")
         assert registry.is_registered("contains")
         assert registry.is_registered("exists")
-        
+
         # Test getting each function
         equals_func = registry.get_function("equals")
         contains_func = registry.get_function("contains")
         exists_func = registry.get_function("exists")
-        
+
         assert isinstance(equals_func, EqualsFunction)
         assert isinstance(contains_func, ContainsFunction)
         assert isinstance(exists_func, ExistsFunction)
@@ -143,7 +143,7 @@ class TestDefaultRegistry:
         """Test that default registry has all three core functions."""
         expected_functions = ["equals", "contains", "exists"]
         registered_names = default_registry.get_registered_names()
-        
+
         for func_name in expected_functions:
             assert func_name in registered_names
             assert default_registry.is_registered(func_name)
@@ -169,17 +169,17 @@ class TestDefaultRegistry:
         dataset = pydicom.Dataset()
         dataset.PatientName = "John Doe"
         dataset.StudyDescription = "MRI Brain"
-        
+
         # Test equals function
         equals_func = default_registry.get_function("equals")
         assert equals_func.evaluate(dataset, "PatientName", "John Doe")
         assert not equals_func.evaluate(dataset, "PatientName", "Jane Doe")
-        
+
         # Test contains function
         contains_func = default_registry.get_function("contains")
         assert contains_func.evaluate(dataset, "StudyDescription", "MRI")
         assert not contains_func.evaluate(dataset, "StudyDescription", "CT")
-        
+
         # Test exists function
         exists_func = default_registry.get_function("exists")
         assert exists_func.evaluate(dataset, "PatientName")
@@ -188,11 +188,11 @@ class TestDefaultRegistry:
     def test_default_registry_is_separate_instance(self):
         """Test that default registry is separate from new instances."""
         new_registry = FunctionRegistry()
-        
+
         # Default registry should have functions, new one should be empty
         assert len(default_registry.get_registered_names()) == 3
         assert len(new_registry.get_registered_names()) == 0
-        
+
         # Modifying new registry shouldn't affect default
         new_registry.register("test", MockFunction)
         assert new_registry.is_registered("test")
@@ -211,28 +211,28 @@ class TestFunctionRegistryIntegration:
         dataset.StudyDescription = "MRI Brain with Contrast"
         dataset.Modality = "MR"
         dataset.StudyDate = "20240101"
-        
+
         registry = FunctionRegistry()
         registry.register("equals", EqualsFunction)
         registry.register("contains", ContainsFunction)
         registry.register("exists", ExistsFunction)
-        
+
         # Test various scenarios
         equals_func = registry.get_function("equals")
         contains_func = registry.get_function("contains")
         exists_func = registry.get_function("exists")
-        
+
         # Equals tests
         assert equals_func.evaluate(dataset, "PatientID", "12345")
         assert equals_func.evaluate(dataset, "Modality", "MR")
         assert not equals_func.evaluate(dataset, "Modality", "CT")
-        
+
         # Contains tests
         assert contains_func.evaluate(dataset, "StudyDescription", "Brain")
         assert contains_func.evaluate(dataset, "StudyDescription", "Contrast")
         assert contains_func.evaluate(dataset, "PatientName", "John")
         assert not contains_func.evaluate(dataset, "StudyDescription", "Chest")
-        
+
         # Exists tests
         assert exists_func.evaluate(dataset, "PatientName")
         assert exists_func.evaluate(dataset, "StudyDate")
@@ -242,12 +242,12 @@ class TestFunctionRegistryIntegration:
         """Test that registry properly handles function evaluation errors."""
         registry = FunctionRegistry()
         registry.register("equals", EqualsFunction)
-        
+
         dataset = pydicom.Dataset()
         dataset.PatientName = "Test Patient"
-        
+
         equals_func = registry.get_function("equals")
-        
+
         # Test that missing argument raises appropriate error
-        with pytest.raises(Exception):  # Should raise EvaluationError
+        with pytest.raises((EvaluationError, TypeError)):
             equals_func.evaluate(dataset, "PatientName", None)
