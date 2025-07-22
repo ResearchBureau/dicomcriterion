@@ -198,7 +198,7 @@ def example_multiple_datasets():
     }
 
     # Evaluate each rule against each dataset
-    print(f"{'Dataset':<15} {'Rule':<20} {'Result'}")
+    print(f"{'Dataset': <15} {'Rule': <20} {'Result'}")
     print("-" * 50)
 
     for dataset_name, dataset in datasets.items():
@@ -206,9 +206,9 @@ def example_multiple_datasets():
             try:
                 criterion = Criterion(rule_expression)
                 result = criterion.evaluate(dataset)
-                print(f"{dataset_name:<15} {rule_name:<20} {result}")
+                print(f"{dataset_name: <15} {rule_name: <20} {result}")
             except Exception as e:
-                print(f"{dataset_name:<15} {rule_name:<20} ERROR: {e}")
+                print(f"{dataset_name: <15} {rule_name: <20} ERROR: {e}")
 
     print()
 
@@ -390,7 +390,7 @@ def example_real_world_workflows():
     print("=" * 60)
 
     for study_name, dataset in studies.items():
-        print(f"\n{study_name}:")
+        print(f"\n{study_name}: ")
         print(f"  Patient: {getattr(dataset, 'PatientName', 'N/A')}")
         print(f"  Study: {getattr(dataset, 'StudyDescription', 'N/A')}")
         print("  Workflow Assignments:")

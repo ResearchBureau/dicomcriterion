@@ -192,7 +192,9 @@ class Criterion:
                 else:
                     # This shouldn't happen if our implementation is correct
                     raise ValueError(
-                        f"Symbol {symbol_key} not found in " f"symbol mapping"
+                        f"Symbol {symbol_key} not found "
+                        f"in "
+                        f"symbol mapping"  # noqa E713
                     )
 
             # Evaluate the boolean expression using the symbol values

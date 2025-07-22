@@ -1146,7 +1146,7 @@ class TestUsageExamples:
         for i in range(10):
             dataset = Dataset()
             dataset.PatientName = f"Patient {i}"
-            dataset.PatientID = f"ID{i:03d}"
+            dataset.PatientID = f"ID{i: 03d}"
             dataset.StudyDescription = f"Study {i} - {'MRI' if i % 2 == 0 else 'CT'}"
             dataset.Modality = "MR" if i % 2 == 0 else "CT"
             datasets.append(dataset)
