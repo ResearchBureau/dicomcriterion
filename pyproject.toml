@@ -1,12 +1,33 @@
 [project]
+authors = [{name="sjoerdk"},{name="Claude Sonnet 4"}]
 name = "dicomcriterion"
 version = "0.1.0"
+license = "MIT"
 description = "Create and evaluate boolean expressions against DICOM datasets"
 readme = "README.md"
-licence = "MIT"
 requires-python = ">=3.10"
 dependencies = [
     "boolean.py>=4.0",
     "pydicom>=2.4.0",
     "pytest>=8.4.1",
 ]
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+isolated_build = True
+envlist = py312, py313
+[gh-actions]
+python =
+    3.12: py312
+    3.13: py313
+
+[testenv]
+dependency_groups =
+    dev
+commands =
+    {envpython} -m pytest --basetemp={envtmpdir} {posargs}
+"""
+
+[tool.uv]
+package = true
