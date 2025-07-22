@@ -1,6 +1,6 @@
 # DICOM Criterion
 
-[![CI](https://github.com/sjoerdk/dicomcriterion/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/sjoerdk/dicomcriterion/actions/workflows/build.yml?query=branch%3Amain)
+[![CI](https://github.com/ResearchBureau/dicomcriterion/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/ResearchBureau/dicomcriterion/actions/workflows/build.yml?query=branch%3Amain)
 [![PyPI](https://img.shields.io/pypi/v/dicomcriterion)](https://pypi.org/project/dicomcriterion/)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/dicomcriterion)](https://pypi.org/project/dicomcriterion/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
@@ -38,7 +38,7 @@ result = criterion.evaluate(dataset)  # Returns True
 ## Installation
 
 ```bash
-pip install dicom-criterion
+pip install dicomcriterion
 ```
 
 ## Credits
