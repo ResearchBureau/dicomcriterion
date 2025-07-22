@@ -23,8 +23,6 @@ python =
     3.13: py313
 
 [testenv]
-dependency_groups =
-    dev
 commands =
     {envpython} -m pytest --basetemp={envtmpdir} {posargs}
 """
