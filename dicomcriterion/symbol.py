@@ -94,8 +94,12 @@ class DicomSymbol:
         symbol_str = symbol_str.strip()
 
         # Pattern to match: attribute.function(argument) or attribute.function()
-        # This handles quoted strings, unquoted strings, and no arguments
-        pattern = r"^([a-zA-Z_][a-zA-Z0-9_]*)\.([a-zA-Z_][a-zA-Z0-9_]*)\(([^)]*)\)$"
+        # This pattern properly handles quoted strings that may contain parentheses
+        pattern = (
+            r"^([a-zA-Z_][a-zA-Z0-9_]*)\.([a-zA-Z_][a-zA-Z0-9_]*)\("
+            r"((?:[^'\"()]|'[^']*'|\"[^\"]*\")*)"
+            r"\)$"
+        )
 
         match = re.match(pattern, symbol_str)
         if not match:

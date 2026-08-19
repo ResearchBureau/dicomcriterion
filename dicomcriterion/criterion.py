@@ -241,8 +241,13 @@ class Criterion:
             If any DICOM symbol has invalid format
         """
         # Pattern to match DICOM symbols: attribute.function(args)
-        # This pattern captures the full symbol including parentheses and arguments
-        pattern = r"([a-zA-Z_][a-zA-Z0-9_]*\.[a-zA-Z_][a-zA-Z0-9_]*\([^)]*\))"
+        # This pattern properly handles quoted strings that may contain parentheses
+        # It matches: attribute.function( followed by quoted strings or other content, then )
+        pattern = (
+            r"([a-zA-Z_][a-zA-Z0-9_]*\.[a-zA-Z_][a-zA-Z0-9_]*\("
+            r"(?:[^'\"()]|'[^']*'|\"[^\"]*\")*"
+            r"\))"
+        )
 
         matches = re.findall(pattern, expression)
         dicom_symbols = set()
@@ -292,7 +297,12 @@ class Criterion:
 
         # We need to find the original symbol strings in the expression
         # Use regex to find all DICOM symbols and replace them
-        pattern = r"([a-zA-Z_][a-zA-Z0-9_]*\.[a-zA-Z_][a-zA-Z0-9_]*\([^)]*\))"
+        # Use the same pattern that properly handles quoted strings
+        pattern = (
+            r"([a-zA-Z_][a-zA-Z0-9_]*\.[a-zA-Z_][a-zA-Z0-9_]*\("
+            r"(?:[^'\"()]|'[^']*'|\"[^\"]*\")*"
+            r"\))"
+        )
 
         def replace_symbol(match):
             original_symbol_str = match.group(1)
