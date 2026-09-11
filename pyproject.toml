@@ -1,7 +1,7 @@
 [project]
 authors = [{name="sjoerdk"},{name="Claude Sonnet 4"}]
 name = "dicomcriterion"
-version = "0.1.0"
+version = "0.2.0"
 license = "MIT"
 description = "Create and evaluate boolean expressions against DICOM datasets"
 readme = "README.md"
